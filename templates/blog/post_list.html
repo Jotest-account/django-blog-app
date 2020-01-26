@@ -1,0 +1,15 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+    {% for post in post_list %}
+        <div class="cont">
+            <a href="{% url 'post_detail' post.slug %}">
+                {{ post.title }}
+            </a>
+        </div>
+    {% empty %}
+        <div class="container">No posts found</div>
+    {% endfor %}
+
+{% endblock content %}
