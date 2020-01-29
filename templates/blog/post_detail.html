@@ -2,12 +2,40 @@
 
 {% block content %}
     <div class="container">
-    <h2>{{ post.title }}</h2>
-    <p>
-        {{ post.text }}
-    </p>
-    <p>
-        Added: {{ post.added }}
-    </p>
+        <h2>{{ post.title }}</h2>
+        <p>
+            {{ post.text }}
+        </p>
+        <p>
+            Added: {{ post.added }}
+        </p>
+        {% for comment in post.comments.all %}
+            <p>{{ comment.text }}</p>
+            <p>added by: {{ comment.name }} on {{ comment.added }}</p>
+        {% empty %}
+            <p>No comments added</p>
+        {% endfor %}
     </div>
+    <h3>Comment:</h3>
+
+    <form action={% url 'create_comment' post.slug %} method='post' class="form-inline ml-auto">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input name="name" type="text" class="form-control" id="name"
+                   placeholder="Type your name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input name="email" type="email" class="form-control" id="email"
+                   placeholder="Type your email">
+        </div>
+        <div class="form-group">
+            <label for="text">Text:</label>
+            <textarea name="text" class="form-control" rows="3" id="text"
+                      placeholder="Type the comment"></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger">Send</button>
+    </form>
+
 {% endblock content %}
