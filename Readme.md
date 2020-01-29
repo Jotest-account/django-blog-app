@@ -42,7 +42,7 @@ DEBUG=True
 
 4. The container should now be up and running. Run:
 
-  `make dev_web_exec cmd='pipenv install'`
+  `make dev_web_exec cmd='python -m pip install -r requirements.txt''`
   
   To install the dependencies. 
   
