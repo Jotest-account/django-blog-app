@@ -1,0 +1,15 @@
+{% load comments %}
+{% load crispy_forms_tags %}
+<table>
+    <form action="{% comment_form_target %}" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <tr>
+            <td colspan="2">
+                <input type="submit" name="submit" value="Post">
+                <input type="submit" name="preview" value="Preview">
+                <input type="hidden" name="next" value="{% url 'post_detail' post.slug %}" />
+            </td>
+        </tr>
+    </form>
+</table>

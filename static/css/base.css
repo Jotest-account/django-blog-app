@@ -1,3 +1,9 @@
 h1 {
     color: brown;
 }
+#id_honeypot {
+    display: none;
+}
+#div_id_honeypot {
+    display: none;
+}

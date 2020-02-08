@@ -1,0 +1,10 @@
+<ul>
+    {% for comment in comment_list %}
+
+        <li>
+            <strong>Written by: {{ comment.user_name }} on {{ comment.submit_date }}</strong><br><br>
+            {{ comment.comment }}
+        </li>
+        <br>
+    {% endfor %}
+</ul>

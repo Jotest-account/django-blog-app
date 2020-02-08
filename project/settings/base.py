@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'django_extensions',
+    'django_comments',
     # Local
     'users.apps.UsersConfig',
     'pages.apps.PagesConfig',
