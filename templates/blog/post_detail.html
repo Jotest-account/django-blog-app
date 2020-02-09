@@ -11,8 +11,10 @@
             Added: {{ post.added }}
         </p>
     </div>
-    <h3>Comment:</h3>
+    <h3>Comments:</h3>
+
     {% get_comment_count for post as comment_count %}
+
     Number of comments: {{ comment_count }}
 
     {% render_comment_list for post %}

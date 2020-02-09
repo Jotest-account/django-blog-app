@@ -162,4 +162,5 @@ DEFAULT_FROM_EMAIL = 'noreply@email.com'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+MANAGERS = [('J-O Eriksson', 'j-o@example.com'), ]
 

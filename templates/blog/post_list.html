@@ -1,15 +1,25 @@
 {% extends '_base.html' %}
 
 {% block content %}
+    <div class="card bg-light mb-3">
+        {% for post in post_list %}
 
-    {% for post in post_list %}
-        <div class="cont">
-            <a href="{% url 'post_detail' post.slug %}">
-                {{ post.title }}
+            <a href="{% url 'post_detail' post.slug %}" class="list-group-item-action">
+                <div class="card bg-light mb-3">
+
+                    <div class="card-header"><strong>{{ post.title }}</strong>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <p class="card-text font-weight-lighter">
+                        {{ post.text|truncatewords:50 }}
+                    </p>
+                </div>
+
             </a>
-        </div>
-    {% empty %}
-        <div class="container">No posts found</div>
-    {% endfor %}
-
+        {% empty %}
+            <div class="container">No posts found</div>
+        {% endfor %}
+    </div>
 {% endblock content %}
