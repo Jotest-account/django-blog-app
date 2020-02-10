@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'django_extensions',
     'django_comments',
+    'markdownx',
     # Local
     'users.apps.UsersConfig',
     'pages.apps.PagesConfig',

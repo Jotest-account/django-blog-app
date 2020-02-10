@@ -13,7 +13,8 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text font-weight-lighter">
-                        {{ post.text|truncatewords:50 }}
+{#                        {{ post.formatted_markdown|truncatewords:50 }}#}
+                        {{ post.body_summary|safe }}
                     </p>
                 </div>
 
