@@ -1,11 +1,18 @@
 {% extends '_base.html' %}
 {% load comments %}
+{% load base %}
 
 {% block content %}
+
+    {% if perms.post.can_change_post %}
+        <a href="{% url 'post_update' post.slug %}" class="btn btn-outline-secondary">Update post</a>
+    {% endif %}
+
     <div class="container">
         <h2>{{ post.title }}</h2>
         <p>
             {{ post.formatted_markdown|safe }}
+            {{ post.body | custom_markdown }}
         </p>
         <p>
             Added: {{ post.added }}

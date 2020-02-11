@@ -1,7 +1,11 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
-from .models import Post
+from django.contrib.auth import get_user_model
+
+from users.models import CustomUser
+
+from .models import Post, PostViews
 
 
 class PostListView(ListView):
@@ -10,6 +14,29 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
     model = Post
+
+    def get_object(self):
+        obj = super().get_object()
+        obj.num_views = obj.num_views + 1 if obj.num_views else 1
+        obj.save()
+
+        user = self.request.user
+        if user.is_anonymous:
+            user = get_user_model().objects.get(username='anonymous')
+
+        try:
+            user_post_views = PostViews.objects.get(user=user, post=obj)
+        except PostViews.DoesNotExist:
+            user_post_views = None
+
+        if not user_post_views:
+            PostViews.objects.create(user=user, post_id=obj.id, post_views=1)
+        else:
+            post_views = PostViews.objects.get(id=user_post_views.id)
+            post_views.post_views += 1
+            post_views.save()
+
+        return obj
 
 
 class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):

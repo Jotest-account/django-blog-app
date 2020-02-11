@@ -1,19 +1,28 @@
 {% extends '_base.html' %}
 
 {% block content %}
+    <div class="pb-3 d-flex justify-content-between">
+        <div>
+            {% if perms.post.can_add_post %}
+                <a href="{% url 'post_add' %}" class="btn btn-outline-secondary">New Post</a>
+            {% endif %}
+        </div>
+    </div>
+
     <div class="card bg-light mb-3">
         {% for post in post_list %}
 
             <a href="{% url 'post_detail' post.slug %}" class="list-group-item-action">
                 <div class="card bg-light mb-3">
 
-                    <div class="card-header"><strong>{{ post.title }}</strong>
+                    <div class="card-header">
+                        <h2><strong>{{ post.title }}</strong></h2>
                     </div>
 
                 </div>
                 <div class="card-body">
                     <p class="card-text font-weight-lighter">
-{#                        {{ post.formatted_markdown|truncatewords:50 }}#}
+                        {#                        {{ post.formatted_markdown|truncatewords:50 }}#}
                         {{ post.body_summary|safe }}
                     </p>
                 </div>

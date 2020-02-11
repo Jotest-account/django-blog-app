@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # One os.path.dirname added after moving this file into a sub folder of the project
@@ -165,3 +166,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MANAGERS = [('J-O Eriksson', 'j-o@example.com'), ]
 
+MARKDOWNX_MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.codehilite'
+]
+MARKDOWNX_MARKDOWN_EXTENSIONS_CONFIGS = {
+    'codehilite': {
+        'use_pygments': True,
+        'linenums': True,
+        'style': 'monokai',
+        'css_class': 'highlight',
+    }
+}
+MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d')
+MARKDOWNX_IMAGE_MAX_SIZE = {
+    'size': (600, 0),
+    'quality': 90
+}
