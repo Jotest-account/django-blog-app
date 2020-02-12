@@ -3,10 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 
-from users.models import CustomUser
-
 from .models import Post, PostViews
-
+from .forms import PostForm
 
 class PostListView(ListView):
     model = Post
@@ -41,7 +39,8 @@ class PostDetailView(DetailView):
 
 class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Post
-    fields = '__all__'
+    # fields = '__all__'
+    fields = ('title', 'body2')
     permission_required = "auth.change_user"
     success_url = reverse_lazy('post_list')
     login_url = 'home'
@@ -61,9 +60,10 @@ class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Post
-    fields = '__all__'
+    # fields = '__all__'
     permission_required = "auth.change_user"
     template_name_suffix = '_update_form'
+    form_class = PostForm
 
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'slug': self.kwargs['slug']})

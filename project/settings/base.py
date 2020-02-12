@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_comments',
     'markdownx',
+    'martor',
     # Local
     'users.apps.UsersConfig',
     'pages.apps.PagesConfig',
@@ -181,4 +182,10 @@ MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d')
 MARKDOWNX_IMAGE_MAX_SIZE = {
     'size': (600, 0),
     'quality': 90
+}
+MARTOR_ENABLE_CONFIGS = {
+    'jquery': 'true',      # to include/revoke jquery (require for admin default django)
+    'living': 'false',     # to enable/disable live updates in preview
+    'spellcheck': 'true',  # to enable/disable spellcheck in form textareas
+    'hljs': 'true',        # to enable/disable hljs highlighting in preview
 }

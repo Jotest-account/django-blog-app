@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load martortags %}
 
 {% block content %}
     <div class="pb-3 d-flex justify-content-between">
@@ -23,7 +24,7 @@
                 <div class="card-body">
                     <p class="card-text font-weight-lighter">
                         {#                        {{ post.formatted_markdown|truncatewords:50 }}#}
-                        {{ post.body_summary|safe }}
+                        {{ post.body2|safe_markdown|truncatewords:50 }}
                     </p>
                 </div>
 

@@ -1,6 +1,7 @@
 {% extends '_base.html' %}
 {% load comments %}
 {% load base %}
+{% load martortags %}
 
 {% block content %}
 
@@ -11,8 +12,7 @@
     <div class="container">
         <h2>{{ post.title }}</h2>
         <p>
-            {{ post.formatted_markdown|safe }}
-            {{ post.body | custom_markdown }}
+            {{ post.body2|safe_markdown }}
         </p>
         <p>
             Added: {{ post.added }}

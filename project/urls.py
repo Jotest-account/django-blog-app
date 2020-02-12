@@ -17,6 +17,7 @@ urlpatterns = [
                   path('', include('pages.urls')),
                   path('blog/', include('blog.urls')),
                   url(r'^markdownx/', include('markdownx.urls')),
+                  path('martor/', include('martor.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

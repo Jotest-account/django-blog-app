@@ -7,11 +7,12 @@ from django.contrib.auth import get_user_model
 
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
+from martor.models import MartorField
 
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
-    body = MarkdownxField()
+    body2 = MartorField(default='')
     slug = AutoSlugField(null=True, default=None, unique=True, populate_from='title')
     added = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
@@ -25,15 +26,15 @@ class Post(models.Model):
 
     @property
     def formatted_markdown(self):
-        return markdownify(self.body)
+        return markdownify(self.body2)
 
 
     @property
     def body_summary(self):
-        if len(self.body) > 300:
-            return markdownify(f'{self.body[:300]}...')
+        if len(self.body2) > 300:
+            return f'{self.body2[:300]}...'
         else:
-            return markdownify(self.body)
+            return self.body2
 
 
 class PostViews(models.Model):

@@ -1,4 +1,5 @@
 from django import forms
+from martor.fields import MartorFormField
 
 from .models import Post
 
@@ -8,5 +9,5 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = (
             'title',
-            'body',
+            'body2',
         )
