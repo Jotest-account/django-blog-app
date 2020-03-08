@@ -1,4 +1,4 @@
-# Django Template
+# Django Blog App
 
 A project template to use with Django projects. Includes:
 
