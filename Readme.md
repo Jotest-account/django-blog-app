@@ -1,6 +1,6 @@
 # Django Blog App
 
-A project template to use with Django projects. Includes:
+A sample blog app which includes:
 
 - pages app
 - users app
