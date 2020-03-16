@@ -1,13 +1,24 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+import json
+import os
+import uuid
+
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
+from django.http import HttpResponse
+from django.conf import settings
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
 from .models import Post, PostViews
 from .forms import PostForm
 
+
 class PostListView(ListView):
     model = Post
+    paginate_by = 2
 
 
 class PostDetailView(DetailView):
@@ -40,8 +51,8 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Post
     # fields = '__all__'
-    fields = ('title', 'body2')
-    permission_required = "auth.change_user"
+    fields = ('title', 'body')
+    permission_required = "blog.add_post"
     success_url = reverse_lazy('post_list')
     login_url = 'home'
 
@@ -61,9 +72,64 @@ class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Post
     # fields = '__all__'
-    permission_required = "auth.change_user"
+    permission_required = 'blog.change_post'
     template_name_suffix = '_update_form'
     form_class = PostForm
 
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'slug': self.kwargs['slug']})
+
+
+class PostDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    model = Post
+    permission_required = 'blog.delete_post'
+
+    success_url = reverse_lazy('post_list')
+
+
+from martor.utils import LazyEncoder
+
+
+@login_required
+def markdown_uploader(request):
+    """
+    Makdown image upload for locale storage
+    and represent as json to markdown editor.
+    """
+    if request.method == 'POST' and request.is_ajax():
+        if 'markdown-image-upload' in request.FILES:
+            image = request.FILES['markdown-image-upload']
+            image_types = [
+                'image/png', 'image/jpg',
+                'image/jpeg', 'image/pjpeg', 'image/gif'
+            ]
+            if image.content_type not in image_types:
+                data = json.dumps({
+                    'status': 405,
+                    'error': ('Bad image format.')
+                }, cls=LazyEncoder)
+                return HttpResponse(
+                    data, content_type='application/json', status=405)
+
+            if image.size > settings.MAX_IMAGE_UPLOAD_SIZE:
+                to_MB = settings.MAX_IMAGE_UPLOAD_SIZE / (1024 * 1024)
+                data = json.dumps({
+                    'status': 405,
+                    'error': _('Maximum image file is %(size) MB.') % {'size': to_MB}
+                }, cls=LazyEncoder)
+                return HttpResponse(
+                    data, content_type='application/json', status=405)
+
+            img_uuid = "{0}-{1}".format(uuid.uuid4().hex[:10], image.name.replace(' ', '-'))
+            tmp_file = os.path.join(settings.MARTOR_UPLOAD_PATH, img_uuid)
+            def_path = default_storage.save(tmp_file, ContentFile(image.read()))
+            img_url = os.path.join(settings.MEDIA_URL, def_path)
+
+            data = json.dumps({
+                'status': 200,
+                'link': img_url,
+                'name': image.name
+            })
+            return HttpResponse(data, content_type='application/json')
+        return HttpResponse(_('Invalid request!'))
+    return HttpResponse(_('Invalid request!'))

@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.humanize',
     # Third party
     'crispy_forms',
     'allauth',
@@ -161,6 +162,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 DEFAULT_FROM_EMAIL = 'noreply@email.com'
 
+MAX_IMAGE_UPLOAD_SIZE = 5242880 # 5 MB
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -180,7 +182,7 @@ MARKDOWNX_MARKDOWN_EXTENSIONS_CONFIGS = {
 }
 MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d')
 MARKDOWNX_IMAGE_MAX_SIZE = {
-    'size': (600, 0),
+    'size': (1300, 0),
     'quality': 90
 }
 MARTOR_ENABLE_CONFIGS = {
@@ -188,4 +190,26 @@ MARTOR_ENABLE_CONFIGS = {
     'living': 'false',     # to enable/disable live updates in preview
     'spellcheck': 'true',  # to enable/disable spellcheck in form textareas
     'hljs': 'true',        # to enable/disable hljs highlighting in preview
+    'imgur': 'true',     # to enable/disable imgur uploader/custom uploader.
+    'mention': 'true',   # to enable/disable mention
 }
+
+# Markdown extensions (default)
+MARTOR_MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.extra',
+    'markdown.extensions.nl2br',
+    'markdown.extensions.smarty',
+    'markdown.extensions.fenced_code',
+
+    # Custom markdown extensions.
+    'martor.extensions.urlize',
+    'martor.extensions.del_ins',    # ~~strikethrough~~ and ++underscores++
+    'martor.extensions.mention',    # to parse markdown mention
+    'martor.extensions.emoji',      # to parse markdown emoji
+    'martor.extensions.mdx_video',  # to parse embed/iframe video
+]
+
+# Upload to locale storage
+import time
+MARTOR_UPLOAD_PATH = 'images/uploads/{}'.format(time.strftime("%Y/%m/%d/"))
+MARTOR_UPLOAD_URL = '/api/uploader/'  # change to local uploader

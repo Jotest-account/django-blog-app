@@ -4,7 +4,7 @@
 {% block content %}
     <div class="pb-3 d-flex justify-content-between">
         <div>
-            {% if perms.post.can_add_post %}
+            {% if perms.blog.add_post %}
                 <a href="{% url 'post_add' %}" class="btn btn-outline-secondary">New Post</a>
             {% endif %}
         </div>
@@ -13,7 +13,9 @@
     <div class="card bg-light mb-3">
         {% for post in post_list %}
 
-            <a href="{% url 'post_detail' post.slug %}" class="list-group-item-action">
+{#            <a href="{% url 'post_detail' post.slug %}" class="list-group-item-action">#}
+            <a href="{{ post.get_absolute_url }}" class="list-group-item-action">
+
                 <div class="card bg-light mb-3">
 
                     <div class="card-header">
@@ -24,7 +26,7 @@
                 <div class="card-body">
                     <p class="card-text font-weight-lighter">
                         {#                        {{ post.formatted_markdown|truncatewords:50 }}#}
-                        {{ post.body2|safe_markdown|truncatewords:50 }}
+                        {{ post.body|safe_markdown|truncatewords:50 }}
                     </p>
                 </div>
 
@@ -33,4 +35,21 @@
             <div class="container">No posts found</div>
         {% endfor %}
     </div>
+
+    <div class="pagination container p-3">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a class="btn btn-outline-secondary m-3" href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a class="btn btn-outline-secondary m-3" href="?page={{ page_obj.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+
 {% endblock content %}

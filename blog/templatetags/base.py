@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 register = template.Library()
 
 
+# noinspection DjangoSafeString
 @register.filter(is_safe=True)
 def custom_markdown(value):
     return mark_safe(
