@@ -1,12 +1,10 @@
-import uuid
 from datetime import datetime
 
-from django.db import models
-from django_extensions.db.fields import AutoSlugField
-from django_comments.moderation import CommentModerator, moderator
 from django.contrib.auth import get_user_model
+from django.db import models
 from django.urls import reverse
-
+from django_comments.moderation import CommentModerator, moderator
+from django_extensions.db.fields import AutoSlugField
 from django_lifecycle import LifecycleModelMixin, hook
 from markdownx.utils import markdownify
 from martor.models import MartorField
@@ -49,14 +47,11 @@ class Post(LifecycleModelMixin, TimeStampedModel):
 
     @hook('before_update', when_any=['title', 'body'], has_changed=True)
     def on_update(self):
-        # if self.has_changed('body') or self.has_changed('title'):
-        if not self.title.strip().endswith('(Edited)'):
-            self.title = f'{self.title} (Edited)'
-        self.content_edited = datetime.now()
-
-    # @hook('before_create')
-    # def on_create(self):
-    #     self.content_edited = datetime.now()
+        update_setting = BlogSettings.objects.get(setting_name='modify_title_on_edit')
+        if update_setting.setting_value == 'True':
+            if not self.title.strip().endswith('(Edited)'):
+                self.title = f'{self.title} (Edited)'
+            self.content_edited = datetime.now()
 
 
 class PostViews(models.Model):
@@ -70,6 +65,17 @@ class PostViews(models.Model):
 
     class Meta:
         ordering = ['-updated']
+
+
+class BlogSettings(TimeStampedModel):
+    setting_name = models.CharField(max_length=100)
+    setting_value = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'Setting: {self.setting_name} = {self.setting_value}'
+
+    class Meta:
+        ordering = ['-setting_name']
 
 
 class PostModerator(CommentModerator):

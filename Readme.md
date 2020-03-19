@@ -1,19 +1,21 @@
 # Django Blog App
 
-A sample blog app which includes:
+This is a toy Django app which I use to throw in code to try out different concepts in Django, so it can be a bit messy here and there. Also it might contain code that is not used anymore. So you can say it's just a playground where I can throw anything in for testing.
+
+Among other things it includes:
 
 - pages app
 - users app
+- blog app
+    - uses django markdown editor for blog posts
+    - comments on post with django-contrib-comments
+    - hooks into update of bosts with django-lifecycle
 - custom user model (email instead of username)
 - e-mail verification
 - django debug toolbar (only in development)
 - docker files for spinning up containers (python and postgresql)
 - basic tests for pages and users
 - different settings files for development and production
-
-The biggest part of this project I got from the ["Django for professionals"](https://djangoforprofessionals.com) book, and built on what I learned going through its chapters. My thought was to have something to use as a baseline when building my own Django apps.
-
-I could have used the [DjangoX](https://github.com/wsvincent/djangox) repo to get a ready made template. But I wanted to build it my self and choose what should be in it. Also I've built this to learn Django better myself.  
 
 ## Production and development settings
 

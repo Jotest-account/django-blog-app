@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django_comments',
     'markdownx',
     'martor',
+    'schema_graph',
     # Local
     'users.apps.UsersConfig',
     'pages.apps.PagesConfig',
@@ -213,3 +214,33 @@ MARTOR_MARKDOWN_EXTENSIONS = [
 import time
 MARTOR_UPLOAD_PATH = 'images/uploads/{}'.format(time.strftime("%Y/%m/%d/"))
 MARTOR_UPLOAD_URL = '/api/uploader/'  # change to local uploader
+
+# settings.py
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'mylog.log',
+            'formatter': 'file'
+        }
+    },
+    'formatters': {
+        'file': {
+            '()': 'django.utils.log.ServerFormatter',
+            'format': '[{server_time}] message: {message}',
+            'style': '{',
+        }
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'WARNING',
+    }
+}
+

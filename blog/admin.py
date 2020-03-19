@@ -3,7 +3,7 @@ from django.db import models
 from martor.models import MartorField
 from martor.widgets import AdminMartorWidget
 
-from .models import Post
+from .models import Post, BlogSettings
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -17,3 +17,4 @@ class PostAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Post, PostAdmin)
+admin.site.register(BlogSettings)

@@ -12,8 +12,12 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
-from .models import Post, PostViews
+from .models import Post, PostViews, BlogSettings
 from .forms import PostForm
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class PostListView(ListView):
@@ -26,24 +30,30 @@ class PostDetailView(DetailView):
 
     def get_object(self):
         obj = super().get_object()
-        obj.num_views = obj.num_views + 1 if obj.num_views else 1
-        obj.save()
+        logger.error("###############################")
+        logger.error("I am in the PostDetailView")
+        logger.error("###############################")
 
-        user = self.request.user
-        if user.is_anonymous:
-            user = get_user_model().objects.get(username='anonymous')
+        update_setting = BlogSettings.objects.get(setting_name='register_post_visits')
+        if update_setting.setting_value == 'True':
+            obj.num_views = obj.num_views + 1 if obj.num_views else 1
+            obj.save()
 
-        try:
-            user_post_views = PostViews.objects.get(user=user, post=obj)
-        except PostViews.DoesNotExist:
-            user_post_views = None
+            user = self.request.user
+            if user.is_anonymous:
+                user = get_user_model().objects.get(username='anonymous')
 
-        if not user_post_views:
-            PostViews.objects.create(user=user, post_id=obj.id, post_views=1)
-        else:
-            post_views = PostViews.objects.get(id=user_post_views.id)
-            post_views.post_views += 1
-            post_views.save()
+            try:
+                user_post_views = PostViews.objects.get(user=user, post=obj)
+            except PostViews.DoesNotExist:
+                user_post_views = None
+
+            if not user_post_views:
+                PostViews.objects.create(user=user, post_id=obj.id, post_views=1)
+            else:
+                post_views = PostViews.objects.get(id=user_post_views.id)
+                post_views.post_views += 1
+                post_views.save()
 
         return obj
 
