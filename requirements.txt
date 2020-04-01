@@ -19,7 +19,7 @@ oauthlib==3.1.0
 Pillow==7.0.0
 pip-tools==4.5.1
 psycopg2-binary==2.8.4
-Pygments==2.5.2
+Pygments==2.6.1
 python3-openid==3.1.0
 pytz==2019.2
 requests==2.22.0
