@@ -9,7 +9,7 @@ django-lifecycle==0.7.1
 django-markdownx==3.0.1
 django-schema-graph==1.2.0
 Markdown==3.2.1
-martor==1.6.3
+martor==1.6.13
 oauthlib==3.1.0
 Pillow==9.1.1
 pip-tools==6.6.2
